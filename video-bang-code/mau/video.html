@@ -1,0 +1,31 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Mau video bang code</title>
+<style>html,body{margin:0;background:#f4efe6}canvas{display:block;width:100vw;height:auto;max-height:100vh}</style>
+<canvas id="c" width="1280" height="720"></canvas>
+<script>
+// ===== Quy tac: moi hinh anh duoc tinh TU THOI GIAN t. Khong timer, khong random khong hat giong, khong giu trang thai giua cac khung.
+const W=1280,H=720,BPM=120,BEAT=60/BPM,DUR=8;
+const ctx=document.getElementById('c').getContext('2d');
+const clamp=(x,a,b)=>Math.min(b,Math.max(a,x));
+// Spring dap ung bac thang dang cong thuc dong (khong can mo phong). w=tan so, z=he so tat dan
+function step(t,w=14,z=0.62){ if(t<=0)return 0; const wd=w*Math.sqrt(1-z*z);
+  return 1-Math.exp(-z*w*t)*(Math.cos(wd*t)+(z*w/wd)*Math.sin(wd*t)); }
+// Gia tri doi muc tieu nhieu lan: cong moi lan doi mot spring
+function spring(t,keys,w,z){ let v=keys[0][1]; for(let i=1;i<keys.length;i++) v+=(keys[i][1]-keys[i-1][1])*step(t-keys[i][0],w,z); return v; }
+function seek(t){
+  ctx.fillStyle='#f4efe6'; ctx.fillRect(0,0,W,H);
+  // qua bong nay len theo nhip: moi 2 nhip doi vi tri
+  const keys=[[0,200]]; for(let i=1;i*2*BEAT<DUR;i++) keys.push([i*2*BEAT,i%2?1080:200]);
+  const x=spring(t,keys,16,0.55);
+  const y=420-Math.abs(Math.sin(t/BEAT*Math.PI))*160; // nay theo moi nhip
+  ctx.fillStyle='#e8590c'; ctx.beginPath(); ctx.arc(x,y,38,0,7); ctx.fill();
+  // chu hien dan theo nhip, khong xuat hien tat ca cung luc
+  const msg='moi khung hinh la mot dong code'; const n=Math.floor(clamp((t-0.5)/BEAT*4,0,msg.length));
+  ctx.fillStyle='#1b1b1b'; ctx.font='600 48px system-ui,sans-serif'; ctx.textAlign='left';
+  ctx.fillText(msg.slice(0,n),(W-ctx.measureText(msg).width)/2,120);
+}
+window.seek=seek; window.DURATION=DUR;
+// Xem truc tiep (khong dung khi render): mo file nay trong trinh duyet
+if(!/render=1/.test(location.search)){ const t0=performance.now(); (function loop(){ seek(((performance.now()-t0)/1000)%DUR); requestAnimationFrame(loop); })(); } else seek(0);
+</script>

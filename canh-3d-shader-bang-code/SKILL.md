@@ -1,31 +1,31 @@
 ---
 name: canh-3d-shader-bang-code
-description: Dựng cảnh 3D và hiệu ứng shader bằng code (Three.js, WebGL2 raymarching, GLSL) trong một file HTML, kèm cách render offline ra MP4. Dùng khi người dùng muốn cảnh 3D tương tác, demoscene, hạt, shader nghệ thuật, mô hình sản phẩm xoay, hoặc video 3D xuất từ trình duyệt.
+description: Build 3D scenes and shader effects in code (Three.js, WebGL2 raymarching, GLSL) inside one HTML file, with offline rendering to MP4. Use when the user wants an interactive 3D scene, demoscene, particles, generative shader art, a rotating product model, or a 3D video exported from the browser.
 ---
 
-# Cảnh 3D và shader bằng code
+# 3D scenes and shaders in code
 
-Dùng kèm `video-bang-code` (khung `seek(t)` và `render.js`). Kỹ thuật phổ biến trong bộ prompt cộng đồng: Three.js (khoảng 130/703 mục), shader (khoảng 90), Canvas 2D giả 3D, particles.
+Use with `video-bang-code` (the `seek(t)` frame and `render.js`). Common techniques in the community prompt set: Three.js (about 130 of 703 entries), shaders (about 90), fake-3D on Canvas 2D, particles.
 
-## Chọn công cụ
-| Việc | Chọn |
+## Pick the tool
+| Job | Choose |
 |---|---|
-| Mô hình có cấu trúc, xoay/phóng/tách rời | Three.js (một file, nạp từ CDN hoặc nhúng) |
-| Hình nghệ thuật liên tục, fractal, chất lỏng | Một fragment shader WebGL2 (raymarching) |
-| Nhẹ, không thư viện | Canvas 2D với phép chiếu tự viết |
-| Hạt, khói, sao | Particles trong shader hoặc Canvas với hạt giống cố định |
+| Structured model that rotates, zooms, explodes apart | Three.js (single file, CDN or inlined) |
+| Continuous generative image, fractals, fluids | One WebGL2 fragment shader (raymarching) |
+| Light, no libraries | Canvas 2D with a hand-written projection |
+| Particles, smoke, stars | Particles in a shader, or Canvas with a fixed seed |
 
-## Quy tắc
-1. **Một trang vừa là bản xem trực tiếp vừa là nguồn render:** `?render=1` tắt vòng lặp tự chạy, chỉ gọi `seek(t)`.
-2. **Tất định:** mọi ngẫu nhiên dùng hạt giống cố định; thời gian chỉ lấy từ `t`.
-3. **Camera và ánh sáng là hàm của `t`** (không tích luỹ trạng thái).
-4. **Hiệu năng xem trực tiếp:** nhắm 60 fps trên Chrome; **render offline** có thể chậm hơn nhiều (nhiều mẫu mỗi điểm ảnh, mờ chuyển động) vì chụp từng khung.
-5. **Tương tác (khi là sản phẩm xem, không phải video):** kéo để xoay, cuộn để phóng, nút "Tách rời" cho các bộ phận trượt ra kèm nhãn, di chuột sáng lên và hiện một dòng mô tả.
-6. **Không tải tài nguyên ngoài** nếu người dùng cần file tự chứa; tạo vật liệu/texture bằng code.
-7. Đừng khẳng định vật lý hoặc số liệu thật nếu không có nguồn; ghi "minh hoạ".
+## Rules
+1. **One page is both the live view and the render source:** `?render=1` turns off the auto loop and only calls `seek(t)`.
+2. **Deterministic:** all randomness uses a fixed seed; time comes only from `t`.
+3. **Camera and lighting are functions of `t`** (no accumulated state).
+4. **Performance:** aim for 60 fps live in Chrome; offline render can be much slower (many samples per pixel, motion blur) because frames are captured one by one.
+5. **Interaction (when it is a product viewer, not a video):** drag to rotate, scroll to zoom, an "Explode" button that slides parts apart with labels, hover to highlight and show a one-line description.
+6. **Load no external assets** if the user needs a self-contained file; make materials and textures in code.
+7. Do not claim real physics or numbers without a source; label it "illustration".
 
-## Kiểm tra
-Chụp vài khung (đầu, giữa, cuối) kiểm tra không có khung đen/trắng, không bị cắt hình, tỉ lệ đúng. Với shader, thử độ phân giải thấp trước rồi mới dựng chất lượng cao.
+## Checks
+Capture a few frames (start, middle, end) to confirm no black/white frames, nothing clipped, correct aspect ratio. For shaders, test at low resolution first, then render in high quality.
 
-## Giới hạn
-Shader nặng (path-tracing, nhiều mẫu) có thể mất rất lâu khi render từng khung; thử 5–10 giây trước.
+## Limits
+Heavy shaders (path tracing, many samples) can take very long when rendered frame by frame; try 5-10 seconds first.

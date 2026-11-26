@@ -26,7 +26,7 @@
 | `mo-phong-tuong-tac-1-file` | Simulations, games and toys in a single HTML file |
 | `thu-vien-prompt-video-opus` | Lookup catalog of 703 community videos (author, type, technique, source link) |
 
-> The skill instructions (SKILL.md) are written in Vietnamese. Your agent can read them as they are, or ask it to translate them for you.
+> Skill folder names are in Vietnamese (the first home of these skills); every SKILL.md is written in English.
 
 ## Real output
 These scenes come from Adam's 2D video line (chibi Rome, four looks: ink / paper cut / felt / clay). They show the quality bar this all-code approach aims for.

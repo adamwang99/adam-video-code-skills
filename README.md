@@ -1,59 +1,61 @@
-![Adam Uses AI - video bằng code](anh/banner.png)
+![One HTML file. One MP4 video.](anh/banner.svg)
 
-# Video bằng code: 7 skill cho Claude và các AI agent
+# Video-in-code: 7 skills for Claude and AI agents
 
-**Một file HTML. Một video MP4.** Bộ skill này dạy AI agent làm video chuyển động hoàn toàn bằng code: không After Effects, không timeline kéo thả, không tệp âm thanh. Mọi khung hình được tính từ thời gian `t`, nên video **tái lập được 100%**, sửa một dòng là dựng lại.
+**One HTML file. One MP4 video.** These skills teach an AI agent to make motion videos entirely in code: no After Effects, no drag-and-drop timeline, no audio files. Every frame is computed from time `t`, so a video is **100% reproducible**: change one line, render again.
 
-![Demo](anh/demo.gif)
+![Demo](anh/demo/caesar-giay.gif)
 
-## Vì sao đáng dùng
-- **Tất định:** cùng `t` ra cùng một hình, không giật, không lệch giữa các lần render.
-- **Chuyển động đắt tiền:** lò xo dạng công thức + lưới nhịp 120 BPM, không còn cảm giác easing mặc định của AI.
-- **Tự chấm điểm:** công cụ xuất một ảnh mỗi nhịp để agent tự xem và sửa trước khi render cả phim.
-- **Âm thanh bằng code:** tạo nhạc và tiếng thao tác bằng Python chuẩn, ghép thẳng vào MP4.
-- **Chạy được ngay:** có file mẫu và công cụ đã kiểm thử (Node + Playwright + ffmpeg).
+## Why you will like it
+- **Deterministic:** same `t` gives the same picture. No jitter, no drift between renders.
+- **Premium motion:** closed-form springs plus a 120 BPM beat grid, so it never looks like default AI easing.
+- **Self-grading:** a tool exports one still per beat so the agent can look, score and fix before rendering the whole film.
+- **Sound in code:** synthesize music and UI sounds with standard-library Python and mux them straight into the MP4.
+- **Works today:** ships with a template and tested tools (Node + Playwright + ffmpeg).
 
-![Mỗi nhịp một ảnh](anh/moi-nhip-mot-anh.png)
+![One still per beat](anh/moi-nhip-mot-anh.png)
 
-## 7 skill
-| Skill | Làm gì |
+## The 7 skills
+| Skill | What it does |
 |---|---|
-| `video-bang-code` | Quy trình HTML → MP4, file mẫu, công cụ render và kiểm tra theo nhịp |
-| `chuyen-dong-spring-nhip-beat` | Lò xo công thức, lưới nhịp, so le, vòng lặp mượt |
-| `am-thanh-tong-hop-bang-code` | Nhạc và tiếng thao tác bằng code, tạo WAV, ghép vào video |
-| `canh-3d-shader-bang-code` | Three.js, WebGL2 raymarching, render offline |
-| `explainer-san-pham-bang-code` | Video giải thích sản phẩm qua 8-12 trạng thái giao diện |
-| `mo-phong-tuong-tac-1-file` | Mô phỏng, game, đồ chơi trong một file HTML |
-| `thu-vien-prompt-video-opus` | Danh mục 703 video cộng đồng để tìm ý tưởng và ghi công tác giả |
+| `video-bang-code` | HTML to MP4 workflow, template, render and per-beat check tools |
+| `chuyen-dong-spring-nhip-beat` | Closed-form springs, beat grid, stagger, seamless loops |
+| `am-thanh-tong-hop-bang-code` | Music and sound effects in code, WAV generator, mux into video |
+| `canh-3d-shader-bang-code` | Three.js, WebGL2 raymarching, offline render |
+| `explainer-san-pham-bang-code` | Product explainer: one morphing shape through 8-12 real UI states |
+| `mo-phong-tuong-tac-1-file` | Simulations, games and toys in a single HTML file |
+| `thu-vien-prompt-video-opus` | Lookup catalog of 703 community videos (author, type, technique, source link) |
 
-## Thành phẩm thật
-Các cảnh dưới đây là đầu ra thật từ dây chuyền video 2D của Adam (chibi La Mã, 4 phong cách nét mực / cắt giấy / vải nỉ / đất nặn). Chúng minh hoạ mức chất lượng mà cách làm "mọi thứ là code" hướng tới.
+> The skill instructions (SKILL.md) are written in Vietnamese. Your agent can read them as they are, or ask it to translate them for you.
 
-![Caesar - cắt giấy](anh/demo/caesar-giay.gif)
+## Real output
+These scenes come from Adam's 2D video line (chibi Rome, four looks: ink / paper cut / felt / clay). They show the quality bar this all-code approach aims for.
 
-[▶ Xem clip 14 giây (MP4)](anh/demo/caesar-giay-14s.mp4)
+![Caesar, paper-cut look](anh/demo/caesar-giay.gif)
 
-![4 phong cách](anh/demo/roma-4-phong-cach.jpg)
+[Watch the 14-second clip (MP4)](anh/demo/caesar-giay-14s.mp4)
 
-![Nhân vật 4 góc nhìn](anh/demo/chibi-4-goc-nhin.jpg)
+![Four looks](anh/demo/roma-4-phong-cach.jpg)
 
-![12 khung kiểm tra](anh/demo/caesar-12-khung.jpg)
+![Characters from four angles](anh/demo/chibi-4-goc-nhin.jpg)
 
-> Ảnh và clip demo © Adam Uses AI, đưa vào repo để minh hoạ.
+![12 check frames](anh/demo/caesar-12-khung.jpg)
 
-## Bắt đầu nhanh
+> Demo images and clips (c) Adam Uses AI, included for illustration.
+
+## Quick start
 ```bash
-npm i playwright && npx playwright install chromium   # cần thêm ffmpeg
+npm i playwright && npx playwright install chromium   # ffmpeg is also required
 cd video-bang-code
-node cong-cu/render.js mau/video.html ra.mp4 --w 1280 --h 720 --fps 30 --dur 8
+node cong-cu/render.js mau/video.html out.mp4 --w 1280 --h 720 --fps 30 --dur 8
 ```
-Chép các thư mục skill vào thư mục skills của Claude (hoặc agent của bạn) rồi nhờ: *"làm video giới thiệu sản phẩm X dài 15 giây"*.
+Copy the skill folders into your Claude (or other agent) skills directory, then ask: *"Make a 15-second product intro video for X."*
 
-## Ghi nguồn
-Kỹ thuật được tổng hợp lại từ bộ sưu tập cộng đồng [awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos) (MIT cho phần danh sách). Prompt và video thuộc về từng tác giả; repo này **không sao chép prompt**, chỉ có danh mục tra cứu kèm link bài gốc.
+## Credits
+The techniques are distilled from the community collection [awesome-opus5-5-videos](https://github.com/yihui-dev/awesome-opus5-5-videos) (MIT for the list itself). Prompts and videos belong to their individual creators. This repo does **not** copy any prompt; it only contains a lookup catalog with links to the original posts.
 
-## Giấy phép
-[MIT](LICENSE) © 2026 Adam Uses AI
+## License
+[MIT](LICENSE) (c) 2026 Adam Uses AI
 
-## Liên hệ
-Website: https://adamusesai.com · Zalo: 0813967222 · WhatsApp: +84813967222 · hello@adamusesai.com
+## Contact
+Website: https://adamusesai.com | Zalo: 0813967222 | WhatsApp: +84813967222 | hello@adamusesai.com

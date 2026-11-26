@@ -1,40 +1,40 @@
 ---
 name: chuyen-dong-spring-nhip-beat
-description: Quy tắc chuyển động cho video/giao diện viết bằng code: lò xo dạng công thức, lưới nhịp BPM, so le, vào nhanh dừng mềm, vòng lặp mượt. Dùng khi cần chuyển động "đắt tiền" thay vì easing mặc định, khi làm video bằng code hoặc hoạt ảnh Canvas/SVG/GSAP.
+description: Motion rules for code-made video and UI - closed-form springs, a BPM beat grid, stagger, enter-fast-settle-soft, seamless loops. Use when you want premium motion instead of default easing, when making video in code, or when animating Canvas/SVG/GSAP.
 ---
 
-# Chuyển động bằng lò xo và lưới nhịp
+# Spring motion and the beat grid
 
-Dùng kèm `video-bang-code`. Mục tiêu: chuyển động nhìn như do nhà thiết kế chuyển động làm, không phải easing mặc định của AI.
+Use with `video-bang-code`. Goal: motion that looks designed by a motion designer, not the default AI easing.
 
-## 1. Lò xo dạng công thức (không mô phỏng)
-Đáp ứng bậc thang của lò xo tắt dần có công thức đóng, nên giá trị chỉ phụ thuộc thời gian `t` (hợp với `seek(t)`):
+## 1. Closed-form springs (no simulation)
+The step response of a damped spring has a closed form, so a value depends only on time `t` (perfect for `seek(t)`):
 
 ```js
 function step(t,w=14,z=0.62){ if(t<=0)return 0; const wd=w*Math.sqrt(1-z*z);
   return 1-Math.exp(-z*w*t)*(Math.cos(wd*t)+(z*w/wd)*Math.sin(wd*t)); }
-// Giá trị đổi mục tiêu nhiều lần: cộng một lò xo cho mỗi lần đổi
+// A value whose target changes several times: sum one spring per change
 function spring(t,keys,w,z){ let v=keys[0][1];
   for(let i=1;i<keys.length;i++) v+=(keys[i][1]-keys[i-1][1])*step(t-keys[i][0],w,z); return v; }
 ```
-- `w` (tần số) 10–20: lớn = nhanh. `z` (tắt dần) 0,5–0,8 cho độ nảy nhẹ; ≥0,95 gần như không nảy.
-- Mặc định chỉ để nảy rất nhẹ ("overshoot nhỏ"). Nảy mạnh chỉ dùng cho nhân vật vui nhộn.
+- `w` (frequency) 10-20: higher is faster. `z` (damping) 0.5-0.8 gives a light bounce; 0.95 or more barely bounces.
+- Default to a very small overshoot. Strong bounce only for playful characters.
 
-## 2. Lưới nhịp
-- Chọn BPM (120 hợp video ngắn). `BEAT = 60/BPM`. Mỗi thay đổi lớn nằm đúng trên nhịp; mỗi nhịp có việc xảy ra.
-- Nếu có nhạc thật: phân tích nhạc trước (ví dụ numpy) để lấy vị trí nhịp, bắt đầu từ nhịp đầu ô nhịp; đặt tiếng thao tác đúng đỉnh âm đo được.
+## 2. The beat grid
+- Pick a BPM (120 suits short videos). `BEAT = 60/BPM`. Every big change lands on a beat; every beat has something happening.
+- With real music: analyze it first (for example with numpy) to get beat positions, start on the first beat of a bar, and place action sounds on measured peaks.
 
-## 3. Cảm giác chuyển động
-- **Vào nhanh, dừng mềm:** mỗi khung đi 12–19% quãng còn lại.
-- **Không đứng yên:** cảnh giữ vẫn đẩy chậm (zoom/trôi rất nhẹ).
-- **So le:** các phần tử cùng nhóm lệch nhau 2–4 khung.
-- **Mờ chuyển động chỉ ở chuyển động nhanh.** Xuất `--mau 4` trong `render.js` để có mờ thật.
-- **Thanh chọn/tab:** hai mép (trái, phải) đi bằng hai lò xo riêng, mép dẫn đầu vượt mép sau.
-- **Kéo thả:** khi đang giữ chuột, giá trị tính từ vị trí con trỏ; khi thả thì lò xo kéo về.
-- Không bao giờ chuyển thẳng từ đen sang màu nhấn; đưa một phần tử màu nhấn vào trước.
+## 3. Feel
+- **Enter fast, settle soft:** each frame covers 12-19% of the remaining distance.
+- **Never fully still:** held scenes still get a slow push (zoom or drift).
+- **Stagger:** group elements offset by 2-4 frames.
+- **Motion blur only on fast moves.** Render with `--mau 4` in `render.js` for real blur.
+- **Selection bar / tabs:** animate the two edges (left, right) with two separate springs; the leading edge overshoots the trailing one.
+- **Drag and drop:** while held, the value follows the pointer; on release a spring pulls it home.
+- Never cut straight from black to the accent color; bring in an accent element first.
 
-## 4. Vòng lặp mượt
-Khung cuối khớp khung đầu, kể cả vị trí và vận tốc con trỏ, nếu không vòng lặp sẽ giật.
+## 4. Seamless loop
+The last frame must match the first, including pointer position and velocity, or the loop will jump.
 
-## 5. Thang tự chấm (mỗi nhịp một ảnh)
-Đúng nhịp? Thoáng? Chữ đọc được trên điện thoại? Có thứ gì chồng nhau? Sửa ảnh điểm thấp nhất, lặp lại.
+## 5. Self-grading scale (one still per beat)
+On the beat? Enough air? Readable on a phone? Anything overlapping? Fix the lowest score, repeat.

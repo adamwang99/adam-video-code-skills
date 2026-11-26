@@ -1,27 +1,27 @@
 ---
 name: explainer-san-pham-bang-code
-description: Làm video giải thích/giới thiệu sản phẩm bằng code theo kiểu một khối biến hình qua 8-12 trạng thái giao diện thật, có con trỏ bấm/gõ/kéo, nhịp 120 BPM, nhiều tỉ lệ khung. Dùng khi cần video giới thiệu app/SaaS/tính năng, bản tin tóm tắt bài viết dạng motion, hoặc "explainer video".
+description: Make product explainer / intro videos in code as one shape that morphs through 8-12 real UI states, with a cursor that clicks, types and drags, a 120 BPM grid and several aspect ratios. Use for app/SaaS/feature intros, article-summary motion posts, or any explainer video.
 ---
 
-# Explainer sản phẩm bằng code
+# Product explainer in code
 
-Dùng kèm `video-bang-code` và `chuyen-dong-spring-nhip-beat`. Chuyên cho video giải thích: giao diện thật, dữ liệu thật, một mạch kể.
+Use with `video-bang-code` and `chuyen-dong-spring-nhip-beat`. Built for explainers: real UI, real data, one continuous story.
 
-## Hỏi trước khi làm (bắt buộc, một lượt)
-- Sản phẩm và địa chỉ (URL); nội dung thật cần hiển thị.
-- 8–12 trạng thái giao diện kể câu chuyện (ví dụ: logo → nút → nhập tên → đang tải → bản đồ → kết quả → đặt chỗ → tìm kiếm → logo).
-- Dữ liệu thật trong mỗi trạng thái (không dùng chỗ giữ chỗ).
-- Màu, phông, màu nhấn; các tỉ lệ cần xuất (1:1, 16:9, 9:16).
-Chưa đủ thì hỏi lại; không bịa số liệu, tên người dùng, doanh thu.
+## Ask first (required, one round)
+- The product and its URL; the real content to show.
+- The 8-12 UI states that tell the story (for example: logo, button, typing a name, loading, map, result, booking, search, logo).
+- Real data in each state (no placeholders).
+- Colors, fonts, accent color; the aspect ratios needed (1:1, 16:9, 9:16).
+If anything is missing, ask again; never invent numbers, user names or revenue.
 
-## Cách dựng
-1. Một file HTML, **một canvas, một hàm `draw(t)`**, không CSS transition, không timer, không giữ trạng thái giữa các khung.
-2. **Một hình duy nhất không cắt cảnh:** mọi trạng thái là cùng một phần tử đổi kích thước, bo góc, màu; nội dung bên trong đổi chỗ.
-3. **Con trỏ dẫn chuỗi:** bấm thật, gõ thật, một lần kéo thả. Khung đầu và khung cuối trùng cả vị trí và vận tốc con trỏ để vòng lặp liền.
-4. **Lưới 120 BPM:** mỗi nhịp một việc. Lò xo công thức, chỉ nảy nhẹ.
-5. **Thứ tự trong khối biến hình:** nội dung mới vào sau khi khối bắt đầu đổi; nội dung cũ ra trước khi khối đổi tiếp, để chữ không chồng.
-6. **Nhiều tỉ lệ:** dùng một cấu hình `bố cục(W,H)` để tính vị trí theo kích thước, rồi xuất từng tỉ lệ bằng `render.js --w --h`.
-7. **Tự chấm:** một ảnh mỗi nhịp, tìm khung lệch nhịp, chật chội hoặc khó đọc, sửa rồi mới render.
+## How to build
+1. One HTML file, **one canvas, one `draw(t)` function**, no CSS transitions, no timers, no state carried between frames.
+2. **One shape, no cuts:** every state is the same element resizing, rounding and recoloring; the content inside swaps.
+3. **A cursor leads the sequence:** real clicks, real typing, one drag. First and last frames match in cursor position and velocity so the loop is seamless.
+4. **120 BPM grid:** one job per beat. Closed-form springs with only a light bounce.
+5. **Order inside the morphing shape:** new content enters after the shape starts changing; old content leaves before the shape changes again, so text never overlaps.
+6. **Several aspect ratios:** use a `layout(W,H)` config that computes positions from the size, then export each ratio with `render.js --w --h`.
+7. **Self-grade:** one still per beat; find off-beat, crowded or hard-to-read frames and fix them before rendering.
 
-## Việc cần tránh
-Số liệu bịa; đường dẫn, logo hay tên thương hiệu không được phép dùng; thông điệp hứa hẹn quá mức. Nếu dựa trên bài viết hay bài đăng của người khác, ghi nguồn và chỉ dùng nội dung được phép.
+## Avoid
+Invented numbers; paths, logos or brand names you are not allowed to use; over-promising copy. If it is based on someone else's article or post, credit the source and use only content you may use.
